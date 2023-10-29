@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator 
 
 class Detection(models.Model):
-    datetime = models.DateTimeField("Date and time of detection")
+    datetime = models.DateTimeField("Date and time of detection", auto_now_add = True)
     frame = models.ImageField(upload_to = "frames/", null = True) 
     video = models.FileField(upload_to = "videos/", null = True,
         validators = [FileExtensionValidator(allowed_extensions = ['MOV','avi','mp4','webm','mkv'])]
