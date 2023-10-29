@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from web.serializers import *
 from .models import *
+from rest_framework.permissions import AllowAny
 
 class DetectionViewSet(viewsets.ModelViewSet):
     """
@@ -10,7 +11,7 @@ class DetectionViewSet(viewsets.ModelViewSet):
     """
     queryset = Detection.objects.all().order_by('-datetime')
     serializer_class = DetectionSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
 class PigeonViewSet(viewsets.ModelViewSet):
     """
@@ -18,7 +19,7 @@ class PigeonViewSet(viewsets.ModelViewSet):
     """
     queryset = Pigeon.objects.all()
     serializer_class = PigeonSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
 class RecognitionViewSet(viewsets.ModelViewSet):
     """
@@ -26,4 +27,4 @@ class RecognitionViewSet(viewsets.ModelViewSet):
     """
     queryset = Recognition.objects.all()
     serializer_class = RecognitionSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]

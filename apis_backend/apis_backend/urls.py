@@ -25,13 +25,11 @@ router.register(r'detections', views.DetectionViewSet)
 router.register(r'pigeons', views.PigeonViewSet)
 router.register(r'recognitions', views.RecognitionViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework'))
-]
+admin.site.site_title = "APIS"
+admin.site.site_header = "APIS | Panel de administración" 
 
 urlpatterns = [
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
 ]
