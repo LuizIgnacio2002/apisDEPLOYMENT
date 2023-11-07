@@ -1,0 +1,4 @@
+format: WAV
+storage: sd
+bocina: Parlante 8 Ohm 0.25W
+https://www.instructables.com/ESP-32-Based-Audio-Player/
