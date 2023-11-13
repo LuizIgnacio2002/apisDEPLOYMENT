@@ -12,7 +12,7 @@ class Detection(models.Model):
     longitude = models.CharField(max_length = 15)
     
     def __str__(self):
-        return self.datetime
+        return str(self.datetime)  # Convertir la fecha y hora a cadena
     
     class Meta:
         verbose_name = "Detección"
