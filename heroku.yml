@@ -1,0 +1,3 @@
+build:
+  config:
+    DISABLE_COLLECTSTATIC: 1
