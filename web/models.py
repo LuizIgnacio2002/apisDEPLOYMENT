@@ -4,6 +4,8 @@ from PIL import Image
 import numpy as np
 import cv2
 from django.utils.safestring import mark_safe
+from django.core.files.base import ContentFile
+import io
 
 
 class Detection(models.Model):
@@ -11,6 +13,7 @@ class Detection(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True,  null=True)
     frame = models.ImageField(upload_to="frames/", null=True)
+    frame_image_detected = models.ImageField(upload_to="frames/", null=True, blank=True)
     #video = models.FileField(upload_to="videos/", null=True,
     #validators=[FileExtensionValidator(allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
     latitude = models.CharField(max_length=15, null=True)
@@ -24,11 +27,20 @@ class Detection(models.Model):
     def admin_image(self):
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url=self.frame.url,
-            width=150,
-            height=150,
+            width=100,
+            height=100,
             ))
     admin_image.short_description = 'Image'
     admin_image.allow_tags = True
+
+    def admin_image_detected(self):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=self.frame_image_detected.url,
+            width=100,
+            height=100,
+            ))
+    admin_image_detected.short_description = 'Image Detected'
+    admin_image_detected.allow_tags = True
 
     def __str__(self):
         return str(self.datetime)
@@ -77,7 +89,30 @@ class Detection(models.Model):
                 self.most_confident_label = classes[int(detection[1])]
                 self.confidence = float(detection[2])
 
-        super().save(update_fields=['most_confident_label', 'confidence'])
+                # Draw bounding box on the original image
+                box = detection[3:7] * [width, height, width, height]
+                x_start, y_start, x_end, y_end = int(box[0]), int(box[1]), int(box[2]), int(box[3])
+                cv2.rectangle(open_cv_image, (x_start, y_start), (x_end, y_end), (0, 255, 0), 2)
+                cv2.putText(open_cv_image, "Conf: {:.2f}".format(detection[2] * 100), (x_start, y_start - 5), 1, 1.2, (255, 0, 0), 2)
+                cv2.putText(open_cv_image, self.most_confident_label, (x_start, y_start - 25), 1, 1.2, (255, 0, 0), 2)
+
+                # Save the modified image to frame_image_detected
+                buffer = io.BytesIO()
+                image_with_box = Image.fromarray(open_cv_image)
+                image_with_box.save(buffer, format='JPEG')
+
+                # Convert the NumPy array to RGB format
+                image_with_box_rgb = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
+
+                # Save the modified image to frame_image_detected
+                buffer = io.BytesIO()
+                image_with_box_pil = Image.fromarray(image_with_box_rgb)
+                image_with_box_pil.save(buffer, format='JPEG')
+                self.frame_image_detected.save('detected_{}.jpg'.format(self.pk), ContentFile(buffer.getvalue()), save=False)
+
+
+        # Save the updated Detection instance
+        super().save(update_fields=['most_confident_label', 'confidence', 'frame_image_detected'])
 
 
 class Pigeon(models.Model):
