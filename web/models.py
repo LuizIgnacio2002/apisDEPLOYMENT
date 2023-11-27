@@ -3,6 +3,8 @@ from django.core.validators import FileExtensionValidator
 from PIL import Image
 import numpy as np
 import cv2
+from django.utils.safestring import mark_safe
+
 
 class Detection(models.Model):
     datetime = models.DateTimeField("Date and time of detection", auto_now_add=True, null=True)
@@ -18,8 +20,19 @@ class Detection(models.Model):
     most_confident_label = models.CharField(max_length=50, blank=True, null=True)
     confidence = models.FloatField(null=True, blank=True)
 
+
+    def admin_image(self):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=self.frame.url,
+            width=150,
+            height=150,
+            ))
+    admin_image.short_description = 'Image'
+    admin_image.allow_tags = True
+
     def __str__(self):
         return str(self.datetime)
+
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
