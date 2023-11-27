@@ -9,7 +9,7 @@ class DetectionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['datetime', 'frame', 'video', 'latitude', 'longitude', 'most_confident_label', 'confidence']
 
 class PigeonSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
+    class Meta: 
         model = Pigeon
         fields = ['name', 'description', 'image']
 
