@@ -6,7 +6,7 @@ from .models import *
 class DetectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Detection
-        fields = ['datetime', 'frame', 'video', 'latitude', 'longitude', 'most_confident_label', 'confidence']
+        fields = ['datetime', 'frame', 'latitude', 'longitude', 'most_confident_label', 'confidence']
 
 class PigeonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta: 
