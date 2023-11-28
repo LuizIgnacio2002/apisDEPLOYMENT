@@ -39,11 +39,11 @@ class RecognitionViewSet(viewsets.ModelViewSet):
 @require_POST
 def send_img(request):
     if request.method == 'POST':
-        data = request.POST #json
-
+        # data = request.POST #json
+        data = json.loads(request.body)
         imagen_base64 = data.get('frame', None)
 
-        if imagen_base64:
+        if imagen_base64 is not None:
             try:
                 imagen_decodificada = base64.b64decode(imagen_base64)
                 imagen_temporal = ContentFile(imagen_decodificada)
