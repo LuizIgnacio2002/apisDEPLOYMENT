@@ -16,7 +16,7 @@ class Detection(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True,  null=True)
     image64 = models.TextField(null=True, blank=True)  # Campo para almacenar la imagen en formato base64
-    frame = models.ImageField(upload_to="frames/", null=True)
+    frame = models.ImageField(upload_to="frames/", null=True, blank=True)
     frame_image_detected = models.ImageField(upload_to="frames/", null=True, blank=True)
     #video = models.FileField(upload_to="videos/", null=True,
     #validators=[FileExtensionValidator(allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
