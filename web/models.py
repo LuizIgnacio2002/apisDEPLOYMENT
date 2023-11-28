@@ -26,23 +26,7 @@ class Detection(models.Model):
     confidence = models.FloatField(null=True, blank=True)
 
 
-    def admin_image(self):
-        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
-            url=self.frame.url,
-            width=100,
-            height=100,
-            ))
-    admin_image.short_description = 'Image'
-    admin_image.allow_tags = True
 
-    def admin_image_detected(self):
-        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
-            url=self.frame_image_detected.url,
-            width=100,
-            height=100,
-            ))
-    admin_image_detected.short_description = 'Image Detected'
-    admin_image_detected.allow_tags = True
 
     def __str__(self):
         return str(self.datetime)
@@ -116,6 +100,28 @@ class Detection(models.Model):
         # Save the updated Detection instance
         super().save(update_fields=['most_confident_label', 'confidence', 'frame_image_detected'])
 
+
+    def admin_image(self):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=self.frame.url,
+            width=100,
+            height=100,
+            ))
+    admin_image.short_description = 'Image'
+    admin_image.allow_tags = True
+
+    def admin_image_detected(self):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=self.frame_image_detected.url,
+            width=100,
+            height=100,
+            ))
+    admin_image_detected.short_description = 'Image Detected'
+    admin_image_detected.allow_tags = True
+
+
+############################
+###########################
 
 class Pigeon(models.Model):
     name = models.CharField(max_length = 15)
