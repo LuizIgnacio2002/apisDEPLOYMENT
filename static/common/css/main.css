@@ -22,3 +22,8 @@ body.theme-darkly p {
 body{
     font-family: Lexend !important;
 }
+
+
+.login-logo img {
+    max-width: 200px;
+}
