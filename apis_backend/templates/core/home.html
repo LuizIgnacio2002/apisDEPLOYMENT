@@ -10,8 +10,8 @@
         <h2>Image Detection</h2>
         <form id="detection-form" enctype="multipart/form-data">
             <input type="file" id="image" name="frame" accept="image/jpeg"><br>
-            <input type="text" id="latitude" name="latitude" placeholder="Latitude"><br>
-            <input type="text" id="longitude" name="longitude" placeholder="Longitude"><br>
+            <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly><br>
+            <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly><br>
             <button type="submit">Save and Detect</button>
         </form>
         <div id="detection-result">
@@ -21,8 +21,39 @@
     </div>
 
     <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else { 
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
         document.getElementById('detection-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            getLocation();
             var formData = new FormData();
             formData.append('frame', document.getElementById('image').files[0]);
             formData.append('latitude', document.getElementById('latitude').value);
