@@ -5,6 +5,11 @@ from web.serializers import *
 from .models import *
 from rest_framework.permissions import AllowAny
 import random as rd
+import base64
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 class DetectionViewSet(viewsets.ModelViewSet):
     """
@@ -30,6 +35,8 @@ class RecognitionViewSet(viewsets.ModelViewSet):
     serializer_class = RecognitionSerializer
     permission_classes = [AllowAny]
 
+@csrf_exempt
+@require_POST
 def send_img(request):
     if request.method == 'POST':
         data = request.POST #json
@@ -41,7 +48,7 @@ def send_img(request):
                 imagen_decodificada = base64.b64decode(imagen_base64)
                 imagen_temporal = ContentFile(imagen_decodificada)
 
-                nuevo_registro = Detection()
+                nuevo_registro = Detection(longitude='15', latitude='23')
                 nuevo_registro.frame.save(f'{rd.randint(10, 10000)}.jpg', imagen_temporal)
 
                 return JsonResponse({
