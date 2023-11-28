@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Detection</title>
+    <!-- Aquí puedes añadir tus estilos CSS o enlaces a hojas de estilo externas -->
+</head>
+<body>
+    <div class="container">
+        <h2>Image Detection</h2>
+        <form id="detection-form">
+            <input type="file" id="image" name="image" accept="image/jpeg"><br>
+            <input type="text" id="latitude" name="latitude" placeholder="Latitude"><br>
+            <input type="text" id="longitude" name="longitude" placeholder="Longitude"><br>
+            <button type="submit">Save and Detect</button>
+        </form>
+        <div id="detection-result">
+            <p><strong>Detected Label:</strong> <span id="detected-label"></span></p>
+            <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('detection-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('frame', document.getElementById('image').files[0]);
+            formData.append('latitude', document.getElementById('latitude').value);
+            formData.append('longitude', document.getElementById('longitude').value);
+
+            // Reemplaza 'your-api-url' con la URL de tu API de Django
+            fetch('https://shark-app-ko77v.ondigitalocean.app/detections/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('detected-label').textContent = data.most_confident_label;
+                document.getElementById('confidence').textContent = data.confidence;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

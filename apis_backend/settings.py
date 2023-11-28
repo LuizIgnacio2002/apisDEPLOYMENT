@@ -60,11 +60,11 @@ CORS_ALLOW_ALL_ORIGINS = True  # Esto permite todas las solicitudes desde cualqu
 
 
 ROOT_URLCONF = 'apis_backend.urls'
-
+import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'apis_backend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
