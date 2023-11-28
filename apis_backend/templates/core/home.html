@@ -1,9 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Image Detection</title>
     <!-- Aquí puedes añadir tus estilos CSS o enlaces a hojas de estilo externas -->
+    <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -21,6 +24,10 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            getLocation();
+        });
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -53,7 +60,6 @@
 
         document.getElementById('detection-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            getLocation();
             var formData = new FormData();
             formData.append('frame', document.getElementById('image').files[0]);
             formData.append('latitude', document.getElementById('latitude').value);
