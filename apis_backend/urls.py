@@ -21,6 +21,8 @@ from rest_framework import routers
 from web import views
 from django.conf import settings
 from django.conf.urls.static import static
+from apis_backend.views import home
+
 
 router = routers.DefaultRouter()
 router.register(r'detections', views.DetectionViewSet)
@@ -34,7 +36,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
-    path('web/', include('web.urls'))
+    path('web/', include('web.urls')),
+    path('home/', home, name='home'),
 ]
 
 
