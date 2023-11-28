@@ -6,12 +6,16 @@ import cv2
 from django.utils.safestring import mark_safe
 from django.core.files.base import ContentFile
 import io
+import base64
+from django.core.files.uploadedfile import SimpleUploadedFile  # Agrega esta importación
 
 
 class Detection(models.Model):
     datetime = models.DateTimeField("Date and time of detection", auto_now_add=True, null=True)
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True,  null=True)
+    image64 = models.TextField(null=True, blank=True)  # Campo para almacenar la imagen en formato base64
     frame = models.ImageField(upload_to="frames/", null=True)
     frame_image_detected = models.ImageField(upload_to="frames/", null=True, blank=True)
     #video = models.FileField(upload_to="videos/", null=True,
@@ -22,6 +26,33 @@ class Detection(models.Model):
     # New fields for detection results
     most_confident_label = models.CharField(max_length=50, blank=True, null=True)
     confidence = models.FloatField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Si hay una imagen en el campo image64, la procesamos antes de guardarla en frame
+        if self.image64:
+            self.process_image_from_base64()
+
+        super().save(*args, **kwargs)
+
+
+    def process_image_from_base64(self):
+        try:
+            # Decodificar la imagen en base64 a una cadena binaria
+            binary_image = base64.b64decode(self.image64)
+
+            # Crear un objeto SimpleUploadedFile para guardar la imagen en el campo 'frame'
+            image_name = f"original_{self.pk}.jpg"  # Cambiar la extensión según el formato
+            image_file = SimpleUploadedFile(image_name, binary_image, content_type="image/jpeg")
+
+            # Guardar la imagen en el campo 'frame'
+            self.frame.save(image_name, image_file, save=False)
+            
+            # Procesar la imagen como se hacía antes
+            self.process_image_for_detection()
+
+        except Exception as e:
+            # Manejar cualquier error que pueda ocurrir durante el proceso
+            print(f"Error al procesar la imagen desde image64: {e}")
 
 
     def admin_image(self):
