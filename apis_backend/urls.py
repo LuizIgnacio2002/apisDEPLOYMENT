@@ -1,7 +1,7 @@
 """
 URL configuration for apis_backend project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The urlpatterns list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
 Examples:
 Function views
@@ -28,7 +28,7 @@ router.register(r'pigeons', views.PigeonViewSet)
 router.register(r'recognitions', views.RecognitionViewSet)
 
 admin.site.site_title = "APIS"
-admin.site.site_header = "APIS | Panel de administración" 
+admin.site.site_header = "APIS"
 
 urlpatterns = [
     path('', include(router.urls)),
