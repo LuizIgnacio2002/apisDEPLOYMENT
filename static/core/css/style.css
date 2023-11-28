@@ -64,3 +64,8 @@ button:hover {
 #detection-result p {
     color: #003050;
 }
+
+
+.login-logo img {
+    max-width: 200px;
+}
