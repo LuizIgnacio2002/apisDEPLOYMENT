@@ -8,8 +8,8 @@
 <body>
     <div class="container">
         <h2>Image Detection</h2>
-        <form id="detection-form">
-            <input type="file" id="image" name="image" accept="image/jpeg"><br>
+        <form id="detection-form" enctype="multipart/form-data">
+            <input type="file" id="image" name="frame" accept="image/jpeg"><br>
             <input type="text" id="latitude" name="latitude" placeholder="Latitude"><br>
             <input type="text" id="longitude" name="longitude" placeholder="Longitude"><br>
             <button type="submit">Save and Detect</button>
@@ -19,12 +19,12 @@
             <p><strong>Confidence:</strong> <span id="confidence"></span></p>
         </div>
     </div>
- 
+
     <script>
         document.getElementById('detection-form').addEventListener('submit', function(e) {
             e.preventDefault();
             var formData = new FormData();
-            formData.append('frame', document.getElementById('frame').files[0]);
+            formData.append('frame', document.getElementById('image').files[0]);
             formData.append('latitude', document.getElementById('latitude').value);
             formData.append('longitude', document.getElementById('longitude').value);
 
