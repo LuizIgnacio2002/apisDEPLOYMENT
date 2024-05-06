@@ -83,10 +83,16 @@ WSGI_APPLICATION = 'apis_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# postgres://test_db_tytx_user:H7iMtHB3ScXKDh5qSSJdrzYJwuEYTRRO@dpg-cosepa21hbls73fjjmag-a.oregon-postgres.render.com/test_db_tytx
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test_db_tytx',
+        'USER': 'test_db_tytx_user',
+        'PASSWORD': 'H7iMtHB3ScXKDh5qSSJdrzYJwuEYTRRO',
+        'HOST': 'dpg-cosepa21hbls73fjjmag-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
 
